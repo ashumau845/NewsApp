@@ -6,6 +6,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import com.littlemango.stacklayoutmanager.StackLayoutManager
 import info.ort.recyclerkotlin.ColorPicker
 import info.ort.recyclerkotlin.Model.Article
@@ -27,10 +31,24 @@ class MainActivity : AppCompatActivity() {
     var pagenum=1
     var totalResult=-1
     val TAG="MainActivity"
+    private lateinit var mInterstitialAd: InterstitialAd
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
-        //var newslist=findViewById(R.id.newslist)
+
+        //admob code
+        MobileAds.initialize(this@MainActivity)
+        mInterstitialAd = InterstitialAd(this)
+        mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
+        mInterstitialAd.loadAd(AdRequest.Builder().build())
+        mInterstitialAd.adListener = object: AdListener() {
+            override fun onAdClosed() {
+                super.onAdClosed()
+                mInterstitialAd.loadAd(AdRequest.Builder().build())
+            }
+        }
+
+            //var newslist=findViewById(R.id.newslist)
        // val songs= listOf<String>("Hello","ABCD","Dance","Chill","Coders Life","Quarantine","Hello","ABCD","Dance","Chill","Coders Life","Quarantine","Hello","ABCD","Dance","Chill","Coders Life","Quarantine")
       /* val songobjects= mutableListOf<Songs>()
         songobjects.add(Songs("Hello","Just the description"))
@@ -70,6 +88,12 @@ class MainActivity : AppCompatActivity() {
                 if(totalResult > layoutManager.itemCount && layoutManager.getFirstVisibleItemPosition() >= layoutManager.itemCount-5){
                     pagenum++
                     getNews()
+                }
+
+                if (position%5==0) {
+                    if (mInterstitialAd.isLoaded) {
+                        mInterstitialAd.show()
+                    }
                 }
             }
 
