@@ -1,4 +1,4 @@
 # NewsApp
 Implemented News api , added recyclerview, written purely on Kotlin
 
-![](screenshots/gif_screens.gif)
+![Alt Text](https://media.giphy.com/media/77JMIoTqifCdlJshrx/giphy.gif)
